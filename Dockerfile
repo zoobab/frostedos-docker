@@ -4,7 +4,7 @@ MAINTAINER Benjamin Henrion <zoobab@gmail.com>
 ENV user frosted
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y -q
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes build-essential git-core wget
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes build-essential git-core wget python
 
 RUN useradd -d /home/$user -m -s /bin/bash $user
 RUN echo "$user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$user
@@ -19,8 +19,8 @@ RUN wget -O $tbz2 https://github.com/insane-adding-machines/crosstool-ng/release
 RUN tar -xf $tbz2
 RUN git clone https://github.com/insane-adding-machines/frosted
 RUN cd frosted && git submodule init && git submodule update
-RUN export PATH=$PATH:/home/$user/arm-frosted-eabi/bin
+ENV PATH $PATH:/home/$user/arm-frosted-eabi/bin
 
 WORKDIR /home/$user/frosted
-# make menuconfig not easy to script
-#RUN ARCH=stm32 make defconfig
+RUN make defconfig TARGET=stm32f746-discovery
+RUN make
