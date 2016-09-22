@@ -27,10 +27,15 @@ WORKDIR /home/$user/frosted
 RUN make defconfig TARGET=qemu
 RUN make
 
+USER root
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes libpixman-1-dev flex bison
+
+USER $user
 WORKDIR /home/$user
 RUN git clone https://github.com/insane-adding-machines/qemu.git
 WORKDIR /home/$user/qemu
+RUN git submodule update --init dtc
 RUN ./configure --prefix=`pwd`/../qemu-bin --target-list=arm-softmmu
-RUN make
+RUN make 
 RUN make install
 ENV PATH `pwd`/qemu-bin/bin:$PATH
