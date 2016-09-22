@@ -4,7 +4,7 @@ MAINTAINER Benjamin Henrion <zoobab@gmail.com>
 ENV user frosted
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y -q
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes build-essential git-core wget python pkg-config zlib1g-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes build-essential git-core wget python pkg-config libglib2.0-dev zlib1g-dev
 
 RUN useradd -d /home/$user -m -s /bin/bash $user
 RUN echo "$user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$user
