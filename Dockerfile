@@ -35,4 +35,4 @@ RUN git submodule update --init dtc
 RUN ./configure --prefix=`pwd`/../qemu-bin --target-list=arm-softmmu
 RUN make 
 RUN make install
-ENV PATH $HOME/qemu-bin/bin:$PATH
+ENV PATH /home/$user/qemu-bin/bin:$PATH
