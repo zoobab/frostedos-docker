@@ -4,7 +4,7 @@ MAINTAINER Benjamin Henrion <zoobab@gmail.com>
 ENV user frosted
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y -q
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes build-essential git-core wget python pkg-config libglib2.0-dev zlib1g-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes build-essential git-core wget python pkg-config libglib2.0-dev zlib1g-dev libpixman-1-dev flex bison
 
 RUN useradd -d /home/$user -m -s /bin/bash $user
 RUN echo "$user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$user
@@ -27,9 +27,6 @@ WORKDIR /home/$user/frosted
 RUN make defconfig TARGET=qemu
 RUN make
 
-USER root
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes libpixman-1-dev flex bison
-
 USER $user
 WORKDIR /home/$user
 RUN git clone https://github.com/insane-adding-machines/qemu.git
@@ -38,4 +35,4 @@ RUN git submodule update --init dtc
 RUN ./configure --prefix=`pwd`/../qemu-bin --target-list=arm-softmmu
 RUN make 
 RUN make install
-ENV PATH `pwd`/qemu-bin/bin:$PATH
+ENV PATH $HOME/qemu-bin/bin:$PATH
