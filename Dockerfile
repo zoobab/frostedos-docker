@@ -46,7 +46,6 @@ RUN cd micropython && make -C mpy-cross
 
 WORKDIR /home/$user/frosted
 RUN make
-RUN cp micropython ~/frosted/frosted-userland/sh/
-RUN make
+#RUN cp micropython ~/frosted/frosted-userland/sh/
 
 ENTRYPOINT ["qemu-system-arm","-semihosting","-M","lm3s6965evb","--kernel","/home/frosted/frosted/image.bin","-serial","stdio"]
