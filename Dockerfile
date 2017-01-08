@@ -31,6 +31,7 @@ RUN make
 
 USER $user
 WORKDIR /home/$user
+
 RUN git clone https://github.com/insane-adding-machines/qemu.git
 WORKDIR /home/$user/qemu
 RUN git submodule update --init dtc
@@ -38,3 +39,14 @@ RUN ./configure --prefix=`pwd`/../qemu-bin --target-list=arm-softmmu
 RUN make 
 RUN make install
 ENV PATH /home/$user/qemu-bin/bin:$PATH
+
+WORKDIR /home/$user
+RUN git clone https://github.com/insane-adding-machines/micropython.git
+RUN cd micropython && make -C mpy-cross
+
+WORKDIR /home/$user/frosted
+RUN make
+RUN cp micropython ~/frosted/frosted-userland/sh/
+RUN make
+
+ENTRYPOINT ["qemu-system-arm","-semihosting","-M","lm3s6965evb","--kernel","/home/frosted/frosted/image.bin","-serial","stdio"]
